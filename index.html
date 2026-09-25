@@ -860,112 +860,206 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
    PRINT — Professional Receipt
    Supports: 80mm thermal, A6, A4
 ════════════════════════════════════════════════════ */
-@page{size:105mm 148mm;margin:4mm 4mm 4mm 4mm;}
+/* ═══════════════════════════════════════
+   PRINT — A6 Receipt (105×148mm)
+═══════════════════════════════════════ */
+@page{
+  size:105mm 148mm;
+  margin:5mm 4mm 5mm 4mm;
+}
 
 @media print{
-  /* Force exact colors */
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;box-sizing:border-box!important;}
-
-  /* Reset body */
-  html,body{width:100%!important;margin:0!important;padding:0!important;background:#fff!important;
-    font-family:'Arial','Helvetica',sans-serif!important;font-size:8pt!important;
-    color:#000!important;line-height:1.3!important;overflow:visible!important;}
-
-  /* Hide everything except invoice page */
-  .app{display:block!important;width:100%!important;height:auto!important;
-    border:none!important;box-shadow:none!important;background:#fff!important;position:static!important;}
-  .sb,.topbar,.ord-top,.pg0-foot,.inv-foot,.pill-group,
-  .cart-side,.prod-search-bar,.modal-ov,.conf-ov,
-  .set-tab,.set-panel,.sp-hdr{display:none!important;}
-  .main,.pages-wrap{display:block!important;width:100%!important;height:auto!important;overflow:visible!important;position:static!important;}
-  .page{display:none!important;position:static!important;transform:none!important;}
-  #pg2{display:block!important;height:auto!important;overflow:visible!important;width:100%!important;}
-
-  /* Invoice body */
-  .inv-body{display:block!important;height:auto!important;overflow:visible!important;
-    padding:0!important;background:#fff!important;}
-
-  /* Restaurant header */
-  .rc{display:block!important;border:none!important;border-radius:0!important;
-    width:100%!important;margin-bottom:3mm!important;box-shadow:none!important;overflow:visible!important;}
-
-  .rc-hdr{padding:2.5mm 3mm!important;border-bottom:none!important;
-    display:flex!important;justify-content:space-between!important;align-items:center!important;
-    background:#111!important;border-radius:0!important;}
-  .rc-name{font-size:10pt!important;font-weight:900!important;color:#fff!important;
-    display:flex!important;align-items:center!important;gap:4px!important;letter-spacing:0.3px!important;}
-  .rc-name i{display:none!important;}
-  .rc-num{font-size:8pt!important;font-weight:900!important;color:#fff!important;
-    background:transparent!important;border:1px solid rgba(255,255,255,0.6)!important;
-    padding:1px 6px!important;border-radius:3px!important;}
-
-  /* Meta info strip */
-  .rc-meta{display:flex!important;border-bottom:1px solid #ddd!important;background:#f7f7f7!important;}
-  .mc{padding:1.5mm 2.5mm!important;border-right:0.5px solid #ddd!important;flex:1!important;}
-  .mc:last-child{border-right:none!important;}
-  .mc-l{font-size:5.5pt!important;font-weight:700!important;text-transform:uppercase!important;
-    color:#666!important;margin-bottom:1px!important;letter-spacing:0.3px!important;}
-  .mc-v{font-size:8pt!important;font-weight:700!important;color:#000!important;}
-
-  /* Address block */
-  .inv-addr{display:flex!important;flex-direction:column!important;gap:1mm!important;
-    border:0.5px solid #bbb!important;padding:2mm 3mm!important;margin-bottom:2mm!important;
-    background:#f9f9f9!important;border-radius:2px!important;}
-  .ia-lbl{font-size:6.5pt!important;font-weight:900!important;color:#444!important;
-    text-transform:uppercase!important;letter-spacing:0.4px!important;margin-bottom:1.5px!important;}
-  .ia-row{font-size:7.5pt!important;color:#000!important;display:flex!important;
-    gap:4px!important;align-items:flex-start!important;}
-  .ia-row i{display:none!important;}
-
-  /* Items table */
-  .inv-t{width:100%!important;border-collapse:collapse!important;margin:0!important;}
-  .inv-t thead tr{background:#eee!important;}
-  .inv-t th{font-size:6pt!important;font-weight:700!important;text-transform:uppercase!important;
-    padding:1.5mm 2mm!important;border-bottom:1px solid #999!important;color:#333!important;
-    letter-spacing:0.3px!important;}
-  .inv-t td{font-size:7.5pt!important;color:#000!important;padding:1.5mm 2mm!important;
-    border-bottom:0.4px solid #e0e0e0!important;vertical-align:top!important;line-height:1.4!important;}
-  .inv-t tr:last-child td{border-bottom:none!important;}
-  /* Odd row subtle tint */
-  .inv-t tbody tr:nth-child(even) td{background:#fafafa!important;}
-
-  /* Quantity badge */
-  .qb{display:inline-flex!important;align-items:center!important;justify-content:center!important;
-    width:16px!important;height:16px!important;border-radius:50%!important;
-    background:#222!important;color:#fff!important;font-size:7pt!important;font-weight:900!important;}
-
-  /* Totals */
-  .tots{border-top:1px solid #aaa!important;padding:2mm 2.5mm!important;
-    display:block!important;background:#fff!important;}
-  .trow{display:flex!important;justify-content:space-between!important;
-    font-size:7.5pt!important;padding:0.5mm 0!important;color:#000!important;}
-  .trow.gd{font-size:11pt!important;font-weight:900!important;
-    border-top:1.5px solid #000!important;padding-top:2mm!important;margin-top:1mm!important;}
-
-  /* Note strip */
-  .note-s{border:0.8px dashed #777!important;padding:2mm 2.5mm!important;
-    margin-top:2mm!important;border-radius:2px!important;}
-  .note-s .nl{font-size:6pt!important;font-weight:900!important;
-    text-transform:uppercase!important;letter-spacing:0.4px!important;color:#555!important;margin-bottom:1px!important;}
-  .note-s .nt{font-size:7.5pt!important;color:#000!important;line-height:1.4!important;}
-
-  /* Free text invoice */
-  .ft-inv{display:block!important;background:#f5f5f5!important;border:0.5px solid #aaa!important;
-    border-radius:0!important;padding:2mm 2.5mm!important;margin-bottom:2mm!important;}
-  .ft-inv-lbl{font-size:6pt!important;font-weight:900!important;
-    text-transform:uppercase!important;color:#555!important;margin-bottom:1.5px!important;}
-  .ft-inv-txt{font-size:8pt!important;line-height:1.4!important;white-space:pre-wrap!important;}
-
-  /* Footer thank-you message */
-  #pg2::after{
-    content:'Vielen Dank für Ihren Besuch!';
-    display:block;text-align:center;font-size:7pt;font-style:italic;
-    color:#888;margin-top:3mm;padding-top:2mm;
-    border-top:0.5px solid #ccc;letter-spacing:0.5px;
+  *{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+    box-sizing:border-box!important;
   }
 
-  /* Page break rules */
-  .rc,.inv-addr,.ft-inv,.note-s,.tots{page-break-inside:avoid!important;}
+  /* ── Reset everything to white page ── */
+  html,body{
+    width:97mm!important;
+    margin:0!important;padding:0!important;
+    background:#fff!important;
+    font-family:Arial,Helvetica,sans-serif!important;
+    font-size:8pt!important;
+    color:#000!important;
+    line-height:1.3!important;
+    overflow:visible!important;
+    height:auto!important;
+    position:static!important;
+  }
+
+  /* ── Hide UI chrome ── */
+  .sb,.topbar,.ord-top,.pg0-foot,.inv-foot,
+  .pill-group,.cart-side,.prod-search-bar,
+  .modal-ov,.conf-ov,.pcmOverlay,.confirm-overlay,
+  .set-panel,.set-tab,.sp-hdr,
+  #pg0,#pg1,#pg3,#pg4{display:none!important;}
+
+  /* ── App shell: flat block ── */
+  .app,.main,.pages-wrap{
+    display:block!important;
+    width:97mm!important;
+    height:auto!important;
+    overflow:visible!important;
+    position:static!important;
+    transform:none!important;
+    background:#fff!important;
+    border:none!important;
+    box-shadow:none!important;
+  }
+
+  /* ── Show only invoice page ── */
+  .page{
+    display:none!important;
+    position:static!important;
+    transform:none!important;
+    width:97mm!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+  #pg2{
+    display:block!important;
+    height:auto!important;
+    overflow:visible!important;
+    width:97mm!important;
+    transform:none!important;
+  }
+
+  /* ── Invoice body ── */
+  .inv-body{
+    display:block!important;
+    height:auto!important;
+    overflow:visible!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+
+  /* ── Address block ── */
+  .inv-addr{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:0.8mm!important;
+    border:0.5px solid #aaa!important;
+    padding:1.5mm 2.5mm!important;
+    margin-bottom:2mm!important;
+    background:#f5f5f5!important;
+    border-radius:2px!important;
+    width:97mm!important;
+  }
+  .ia-lbl{
+    font-size:6pt!important;font-weight:900!important;
+    text-transform:uppercase!important;letter-spacing:0.3px!important;
+    color:#444!important;margin-bottom:1mm!important;
+  }
+  .ia-row{font-size:7.5pt!important;color:#000!important;display:flex!important;gap:3px!important;}
+  .ia-row i{display:none!important;}
+  .ia-tisch-r strong{font-size:9pt!important;font-weight:900!important;}
+
+  /* ── Main receipt card ── */
+  .rc{
+    display:block!important;
+    border:none!important;
+    border-radius:0!important;
+    width:97mm!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    margin-bottom:2mm!important;
+  }
+
+  /* Receipt header */
+  .rc-hdr{
+    padding:2.5mm 3mm!important;
+    display:flex!important;
+    justify-content:space-between!important;
+    align-items:center!important;
+    background:#111!important;
+    border-radius:0!important;
+    margin-bottom:0!important;
+  }
+  .rc-name{font-size:9.5pt!important;font-weight:900!important;color:#fff!important;letter-spacing:0.3px!important;}
+  .rc-name i{display:none!important;}
+  .rc-num{font-size:8pt!important;font-weight:900!important;color:#fff!important;
+    border:1px solid rgba(255,255,255,0.6)!important;padding:1px 6px!important;}
+
+  /* Meta strip */
+  .rc-meta{
+    display:flex!important;
+    border-bottom:1px solid #ddd!important;
+    background:#f0f0f0!important;
+    width:97mm!important;
+  }
+  .mc{padding:1.5mm 2mm!important;border-right:0.5px solid #ccc!important;flex:1!important;}
+  .mc:last-child{border-right:none!important;}
+  .mc-l{font-size:5.5pt!important;font-weight:700!important;text-transform:uppercase!important;color:#666!important;}
+  .mc-v{font-size:8pt!important;font-weight:700!important;color:#000!important;}
+
+  /* Items table */
+  .inv-t{width:97mm!important;border-collapse:collapse!important;table-layout:fixed!important;}
+  .inv-t th{
+    font-size:6pt!important;font-weight:700!important;text-transform:uppercase!important;
+    padding:1.5mm 2mm!important;background:#e8e8e8!important;
+    border-bottom:1px solid #999!important;color:#333!important;letter-spacing:0.3px!important;
+  }
+  .inv-t th:first-child{width:42%!important;}
+  .inv-t th:nth-child(2){width:10%!important;text-align:center!important;}
+  .inv-t th:nth-child(3){width:24%!important;text-align:right!important;}
+  .inv-t th:nth-child(4){width:24%!important;text-align:right!important;}
+  .inv-t td{
+    font-size:7.5pt!important;color:#000!important;
+    padding:1.5mm 2mm!important;border-bottom:0.3px solid #e0e0e0!important;
+    vertical-align:top!important;word-break:break-word!important;
+  }
+  .inv-t td:nth-child(2){text-align:center!important;}
+  .inv-t td:nth-child(3),.inv-t td:nth-child(4){text-align:right!important;}
+  .inv-t tr:last-child td{border-bottom:none!important;}
+  .inv-t tbody tr:nth-child(even) td{background:#fafafa!important;}
+  .qb{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:15px!important;height:15px!important;border-radius:50%!important;
+    background:#333!important;color:#fff!important;font-size:7pt!important;font-weight:900!important;
+  }
+
+  /* Totals */
+  .tots{border-top:1px solid #999!important;padding:2mm 2.5mm!important;display:block!important;}
+  .trow{
+    display:flex!important;justify-content:space-between!important;
+    font-size:7.5pt!important;padding:0.5mm 0!important;color:#000!important;
+  }
+  .trow.gd{
+    font-size:11pt!important;font-weight:900!important;
+    border-top:1.5px solid #000!important;padding-top:2mm!important;margin-top:1mm!important;
+  }
+
+  /* Note */
+  .note-s{
+    border:0.8px dashed #666!important;padding:2mm 2.5mm!important;
+    margin-top:2mm!important;
+  }
+  .note-s .nl{font-size:6pt!important;font-weight:900!important;text-transform:uppercase!important;color:#555!important;}
+  .note-s .nt{font-size:7.5pt!important;}
+
+  /* Free text */
+  .ft-inv{
+    display:block!important;background:#f0f0f0!important;
+    border:0.5px solid #aaa!important;padding:2mm 2.5mm!important;margin-bottom:2mm!important;
+  }
+  .ft-inv-lbl{font-size:6pt!important;font-weight:900!important;text-transform:uppercase!important;color:#555!important;}
+  .ft-inv-txt{font-size:8pt!important;line-height:1.4!important;white-space:pre-wrap!important;}
+
+  /* Thank you footer */
+  #pg2::after{
+    content:'Vielen Dank für Ihren Besuch!';
+    display:block;text-align:center;
+    font-size:7pt;font-style:italic;color:#888;
+    margin-top:3mm;padding-top:2mm;border-top:0.5px solid #ccc;
+  }
+
+  /* Prevent page breaks inside blocks */
+  .rc,.inv-addr,.ft-inv,.note-s,.tots,.rc-meta{
+    page-break-inside:avoid!important;
+    break-inside:avoid!important;
+  }
 }
 </style>
 </head>
