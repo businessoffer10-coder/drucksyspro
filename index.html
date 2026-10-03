@@ -1204,6 +1204,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .dd-sub2{font-size:11px;color:var(--t3);margin-top:1px;}
 .dd-city{font-size:11px;font-weight:700;color:var(--acc-d);background:var(--acc-l);padding:3px 10px;border-radius:12px;white-space:nowrap;flex-shrink:0;}
 .dd-item.active .dd-city{background:var(--acc);color:#fff;}
+
+/* ═══════════════════════════════════════
+   LIEFERGEBIETE & STRASSEN
+═══════════════════════════════════════ */
+.ct-card{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;transition:all .15s;}
+.ct-card.off{opacity:.62;background:var(--surface2);}
+.ct-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ct-top input,.ct-bot input{border:1.5px solid var(--border);border-radius:9px;padding:7px 10px;font-size:13px;font-family:inherit;background:var(--surface2);color:var(--t1);outline:none;}
+.ct-top input:focus,.ct-bot input:focus{border-color:var(--acc);background:var(--surface);}
+.ct-name{flex:1;min-width:140px;font-weight:700;font-size:14px!important;}
+.ct-plz{width:86px;text-align:center;}
+.ct-streets-btn{border:1.5px solid var(--border);background:var(--surface2);border-radius:9px;padding:7px 11px;font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:all .13s;white-space:nowrap;}
+.ct-streets-btn:hover{border-color:var(--acc);color:var(--acc);}
+.ct-streets-btn small{background:var(--acc-l);color:var(--acc-d);padding:1px 7px;border-radius:10px;font-weight:800;font-size:11px;}
+.ct-bot{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.ct-bot label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;}
+.ct-bot input{width:84px;text-align:center;font-weight:700;}
+.ct-newgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:8px;}
+@media(max-width:599px){.ct-newgrid{grid-template-columns:1fr 1fr;}}
+
+.st-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.st-title{flex:1;min-width:160px;}
+.st-title b{font-size:17px;color:var(--t1);letter-spacing:-.2px;}
+.st-title span{font-size:12px;color:var(--t3);margin-left:6px;}
+.st-stats{font-size:12px;color:var(--t2);margin-top:2px;}
+.st-list{max-height:min(460px,60vh);overflow-y:auto;border:1px solid var(--border);border-radius:12px;background:var(--surface);}
+.st-letter{padding:4px 14px;font-size:10px;font-weight:800;color:var(--acc);background:var(--surface2);position:sticky;top:0;z-index:1;letter-spacing:.5px;border-bottom:1px solid var(--border);}
+.st-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);}
+.st-row:hover{background:var(--acc-ll);}
+.st-row>i{color:var(--blue);font-size:15px;flex-shrink:0;}
+.st-name{flex:1;min-width:0;font-size:13.5px;font-weight:500;color:var(--t1);}
+.st-badge{font-size:9px;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:8px;background:var(--green-l);color:var(--green);text-transform:uppercase;}
+.st-edit{flex:1;min-width:0;border:1.5px solid var(--acc);border-radius:8px;padding:6px 9px;font-size:13.5px;font-family:inherit;background:var(--surface);color:var(--t1);outline:none;}
+.st-empty{padding:28px 16px;text-align:center;color:var(--t3);font-size:13px;line-height:1.6;}
+.st-row.flash{animation:stflash 1.8s ease;}
+@keyframes stflash{0%{background:var(--acc-l);}100%{background:transparent;}}
+.dd-new .dd-street{color:var(--acc-d);}
+.dd-new>i{color:var(--acc)!important;}
 </style>
 </head>
 <body>
@@ -1740,18 +1778,54 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
           <!-- Tab 4: Liefergebiete -->
           <div class="set-panel" id="spanel-4">
-            <div class="sp-hdr">🏙 Liefergebiete & Kosten</div>
+            <div class="sp-hdr">🏙 Liefergebiete & Straßen</div>
             <div class="sp-body">
-              <div id="cities-list"></div>
-              <div style="background:var(--surface2);border-radius:10px;padding:14px;">
-                <div class="sp-lbl" style="margin-bottom:10px;">Neue Stadt</div>
-                <div style="display:grid;grid-template-columns:1fr 80px 70px 70px;gap:8px;margin-bottom:10px;">
-                  <div class="sp-field"><span class="sp-lbl">Stadt</span><input class="sp-inp" id="new-city-name" placeholder="Name"/></div>
-                  <div class="sp-field"><span class="sp-lbl">PLZ</span><input class="sp-inp" id="new-city-plz" placeholder="49824"/></div>
-                  <div class="sp-field"><span class="sp-lbl">Gebühr €</span><input class="sp-inp" id="new-city-fee" type="number" min="0" step="0.5" placeholder="2"/></div>
-                  <div class="sp-field"><span class="sp-lbl">Min. €</span><input class="sp-inp" id="new-city-min" type="number" min="0" step="1" placeholder="0"/></div>
+              <div class="xt-seg">
+                <button class="xt-seg-btn active" id="ct-seg-cities" onclick="ctShowView('cities')"><i class="ti ti-building-community"></i>Städte<span class="xt-count" id="ct-count-cities">0</span></button>
+                <button class="xt-seg-btn" id="ct-seg-streets" onclick="ctShowView('streets')"><i class="ti ti-road"></i>Straßen<span class="xt-count" id="ct-count-streets">0</span></button>
+              </div>
+
+              <!-- Ansicht: Städte -->
+              <div id="ct-view-cities" style="display:flex;flex-direction:column;gap:12px;">
+                <div id="cities-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+                <div class="xt-card">
+                  <div class="xt-lbl" style="margin-bottom:10px;">Neue Stadt</div>
+                  <div class="ct-newgrid">
+                    <div class="xt-field"><span class="xt-lbl">Stadt</span><input class="xt-inp" id="new-city-name" placeholder="Name"/></div>
+                    <div class="xt-field"><span class="xt-lbl">PLZ</span><input class="xt-inp" id="new-city-plz" placeholder="49824"/></div>
+                    <div class="xt-field"><span class="xt-lbl">Gebühr €</span><input class="xt-inp" id="new-city-fee" type="number" min="0" step="0.5" placeholder="2"/></div>
+                    <div class="xt-field"><span class="xt-lbl">Min. €</span><input class="xt-inp" id="new-city-min" type="number" min="0" step="1" placeholder="0"/></div>
+                  </div>
+                  <button class="btn btn-p btn-sm" style="margin-top:10px;" onclick="addCity()"><i class="ti ti-plus"></i>Stadt hinzufügen</button>
                 </div>
-                <button class="btn btn-p btn-sm" onclick="addCity()"><i class="ti ti-plus"></i>Hinzufügen</button>
+              </div>
+
+              <!-- Ansicht: Straßen -->
+              <div id="ct-view-streets" style="display:none;flex-direction:column;gap:12px;">
+                <div class="xt-filter" id="st-cities"></div>
+                <div class="st-head" id="st-head"></div>
+
+                <div class="xt-card">
+                  <div style="display:flex;gap:8px;">
+                    <div class="xt-search" style="flex:1;"><i class="ti ti-road"></i><input id="st-new" placeholder="Neue Straße eingeben …" onkeydown="if(event.key==='Enter')stAdd()"/></div>
+                    <button class="btn btn-p btn-sm" onclick="stAdd()"><i class="ti ti-plus"></i>Hinzufügen</button>
+                    <button class="btn btn-ghost btn-sm" onclick="stBulkToggle()"><i class="ti ti-list"></i>Mehrere</button>
+                  </div>
+                  <div id="st-bulk" style="display:none;margin-top:10px;">
+                    <textarea class="xt-inp" id="st-bulk-text" rows="5" placeholder="Eine Straße pro Zeile (oder durch Komma getrennt)…" oninput="stBulkPreview()"></textarea>
+                    <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;">
+                      <span id="st-bulk-info" style="font-size:12px;color:var(--t3);flex:1;"></span>
+                      <button class="btn btn-ghost btn-xs" onclick="stBulkToggle()">Abbrechen</button>
+                      <button class="btn btn-p btn-sm" onclick="stBulkAdd()"><i class="ti ti-check"></i>Alle hinzufügen</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="xt-toolbar">
+                  <div class="xt-search"><i class="ti ti-search"></i><input id="st-search" placeholder="In dieser Stadt suchen…" oninput="stRenderList()"/></div>
+                  <div class="xt-filter" id="st-filter"></div>
+                </div>
+                <div class="st-list" id="st-list"></div>
               </div>
             </div>
           </div>
@@ -2306,7 +2380,7 @@ function loadSettings(){
 function persistSettings(){
   var cp={};
   catKeys.forEach(function(k){var cs=MENU[k].items.filter(function(p){return String(p.id).indexOf('custom-')===0;});if(cs.length)cp[k]=cs;});
-  settings.customProds=cp;settings.cities=CITIES_DATA;settings.tischCount=tischCount;settings.theme=settings.theme||'warm';
+  settings.customProds=cp;settings.cities=CITIES_DATA;settings.streets=ADDR_DATA;settings.tischCount=tischCount;settings.theme=settings.theme||'warm';
   try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));}catch(e){}
 }
 function gatherSettingsFields(){
@@ -2328,6 +2402,7 @@ function applySettings(){
   var tg=$('tgl-auto-print');if(tg)tg.classList.toggle('on',!!settings.autoPrint);
   tischCount=settings.tischCount||30;setText('tisch-count-lbl',tischCount);
   if(settings.cities&&settings.cities.length)CITIES_DATA=settings.cities;
+  applyStreetConfig();
   applyExtrasConfig();
   if(settings.kitchenFonts){kitchenFonts=settings.kitchenFonts;setVal('font-qty',kitchenFonts.qty);setVal('font-item',kitchenFonts.item);setVal('font-hdr',kitchenFonts.hdr);updateKitchenPreview(true);}
   Object.keys(settings.bestellarten||{}).forEach(function(t){
@@ -2374,6 +2449,7 @@ function selSetTab(n){
   if(n===3)renderTischPreview();
   if(n===7)renderThemeGrid();
   if(n===5)xtRenderAll();
+  if(n===4)ctRenderAll();
 }
 
 /* ══════════ THEMES ══════════ */
@@ -2552,33 +2628,216 @@ function reprintOrder(idx){
   w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();w.close();},400);
 }
 
-/* ══════════ CITIES ══════════ */
+/* ══════════ CITIES & STREETS ══════════
+   ADDR_DATA: Stadt → Straßenliste. Alles wird in settings.streets / settings.cities gespeichert.
+   BASE_ADDR: unveränderte Ausgangsdaten (für „Eigene“-Markierung und „Zurücksetzen“).        */
+var BASE_ADDR=JSON.parse(JSON.stringify(ADDR_DATA));
+var ctView='cities',stCity=null,stFilter='all',stEditing=null,stView=[],stFlash=null;
+
 function getCityFee(n){var c=CITIES_DATA.filter(function(x){return x.name===n&&x.active;})[0];return c?c.fee:0;}
 function getCityMinOrder(n){var c=CITIES_DATA.filter(function(x){return x.name===n&&x.active;})[0];return c?(c.minOrder||0):0;}
-function renderCitiesList(){
+
+function normStreet(s){return String(s==null?'':s).replace(/\s+/g,' ').trim();}
+function capFirst(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s;}
+function stSort(arr){arr.sort(function(a,b){return a.localeCompare(b,'de');});}
+function stHas(city,name,except){
+  var l=name.toLowerCase();
+  return (ADDR_DATA[city]||[]).some(function(s){return s!==except&&s.toLowerCase()===l;});
+}
+function cityObj(name){return CITIES_DATA.filter(function(c){return c.name===name;})[0];}
+function baseListFor(name){var c=cityObj(name);return (c&&c.baseKey&&BASE_ADDR[c.baseKey])?BASE_ADDR[c.baseKey]:null;}
+function totalStreets(){var n=0;CITIES_DATA.forEach(function(c){n+=(ADDR_DATA[c.name]||[]).length;});return n;}
+
+/* Beim Start: gespeicherte Straßen laden, neue Städte mit leerer Liste absichern */
+function applyStreetConfig(){
+  if(settings.streets){Object.keys(settings.streets).forEach(function(c){ADDR_DATA[c]=settings.streets[c].slice();});}
+  var names={};CITIES_DATA.forEach(function(c){names[c.name]=1;if(!c.baseKey&&BASE_ADDR[c.name])c.baseKey=c.name;});
+  Object.keys(ADDR_DATA).forEach(function(c){if(!names[c])delete ADDR_DATA[c];});
+  CITIES_DATA.forEach(function(c){if(!ADDR_DATA[c.name])ADDR_DATA[c.name]=[];if(c.plz)PLZ[c.name]=c.plz;});
+}
+
+/* ── Ansichten ── */
+function ctShowView(v){
+  ctView=v;
+  $('ct-view-cities').style.display=v==='cities'?'flex':'none';$('ct-view-streets').style.display=v==='streets'?'flex':'none';
+  $('ct-seg-cities').classList.toggle('active',v==='cities');$('ct-seg-streets').classList.toggle('active',v==='streets');
+  if(v==='streets')stRenderAll();else ctRenderCities();
+}
+function ctRenderCounts(){setText('ct-count-cities',CITIES_DATA.length);setText('ct-count-streets',totalStreets());}
+function ctRenderAll(){ctRenderCities();ctRenderCounts();if(ctView==='streets')stRenderAll();}
+function renderCitiesList(){ctRenderAll();}
+
+/* ── Städte ── */
+function ctRenderCities(){
   var el=$('cities-list');if(!el)return;
   el.innerHTML=CITIES_DATA.map(function(c,i){
-    return '<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:.5px solid var(--border);flex-wrap:wrap;">'+
-      '<div class="tgl '+(c.active?'on':'')+'" onclick="toggleCityActive('+i+')"></div>'+
-      '<div style="flex:1;min-width:110px;"><div style="font-size:13px;font-weight:600;">'+c.name+' <span style="font-size:11px;color:var(--t3);">'+c.plz+'</span></div>'+
-      '<div style="font-size:11px;color:var(--t2);">Gebühr '+fmt(c.fee)+(c.minOrder>0?' · Min '+fmt(c.minOrder):'')+'</div></div>'+
-      '<input type="number" value="'+c.fee+'" min="0" step="0.5" class="sp-inp" style="width:70px;padding:5px 7px;text-align:center;" onchange="updateCityFee('+i+',this.value)" title="Liefergebühr"/>'+
-      '<input type="number" value="'+(c.minOrder||0)+'" min="0" step="1" class="sp-inp" style="width:70px;padding:5px 7px;text-align:center;" onchange="updateCityMin('+i+',this.value)" title="Mindestbestellwert"/>'+
-      '<button class="btn btn-del btn-xs" onclick="deleteCity('+i+')"'+(CITIES_DATA.length<=1?' disabled':'')+'><i class="ti ti-trash"></i></button></div>';
+    var n=(ADDR_DATA[c.name]||[]).length;
+    return '<div class="ct-card'+(c.active?'':' off')+'"><div class="ct-top">'+
+      '<div class="tgl '+(c.active?'on':'')+'" onclick="toggleCityActive('+i+')" title="Aktiv"></div>'+
+      '<input class="ct-name" value="'+esc(c.name)+'" onchange="renameCity('+i+',this.value)" title="Stadtname"/>'+
+      '<input class="ct-plz" value="'+esc(c.plz||'')+'" placeholder="PLZ" onchange="updateCityPlz('+i+',this.value)" title="PLZ"/>'+
+      '<button class="ct-streets-btn" onclick="stOpenCity('+i+')"><i class="ti ti-road"></i>Straßen <small>'+n+'</small></button>'+
+      '<button class="xt-mini" onclick="deleteCity('+i+')"'+(CITIES_DATA.length<=1?' disabled':'')+' title="Stadt löschen"><i class="ti ti-trash"></i></button></div>'+
+      '<div class="ct-bot"><label>Liefergebühr<input type="number" min="0" step="0.5" value="'+c.fee+'" onchange="updateCityFee('+i+',this.value)"/>€</label>'+
+      '<label>Mindestbestellwert<input type="number" min="0" step="1" value="'+(c.minOrder||0)+'" onchange="updateCityMin('+i+',this.value)"/>€</label></div></div>';
   }).join('');
 }
-function toggleCityActive(i){CITIES_DATA[i].active=!CITIES_DATA[i].active;renderCitiesList();persistSettings();}
-function updateCityFee(i,v){CITIES_DATA[i].fee=parseFloat(v)||0;renderCitiesList();persistSettings();updateInvoice();}
-function updateCityMin(i,v){CITIES_DATA[i].minOrder=parseFloat(v)||0;renderCitiesList();persistSettings();}
-function deleteCity(i){if(CITIES_DATA.length<=1)return;CITIES_DATA.splice(i,1);renderCitiesList();persistSettings();}
+function toggleCityActive(i){CITIES_DATA[i].active=!CITIES_DATA[i].active;persistSettings();ctRenderCities();}
+function updateCityFee(i,v){CITIES_DATA[i].fee=parseFloat(v)||0;persistSettings();updateInvoice();}
+function updateCityMin(i,v){CITIES_DATA[i].minOrder=parseFloat(v)||0;persistSettings();}
+function updateCityPlz(i,v){
+  var c=CITIES_DATA[i];c.plz=String(v||'').trim();PLZ[c.name]=c.plz;persistSettings();
+  if(selCity===c.name){setText('chip-city-name',c.name+' ('+c.plz+')');updateLiefSum();}
+}
+function renameCity(i,v){
+  var c=CITIES_DATA[i],old=c.name,nn=normStreet(v);
+  if(!nn||nn===old){ctRenderCities();return;}
+  if(CITIES_DATA.some(function(x,k){return k!==i&&x.name.toLowerCase()===nn.toLowerCase();})){showToast('⚠️ Diese Stadt gibt es schon');ctRenderCities();return;}
+  ADDR_DATA[nn]=ADDR_DATA[old]||[];delete ADDR_DATA[old];PLZ[nn]=PLZ[old]||c.plz||'';delete PLZ[old];c.name=nn;
+  if(stCity===old)stCity=nn;
+  if(selCity===old){selCity=nn;setText('chip-city-name',nn+' ('+(PLZ[nn]||'')+')');updateLiefSum();}
+  persistSettings();ctRenderAll();showToast('✅ Stadt umbenannt');
+}
+function deleteCity(i){
+  if(CITIES_DATA.length<=1)return;var c=CITIES_DATA[i],n=(ADDR_DATA[c.name]||[]).length;
+  openConfirm('🗑️','Stadt löschen?','„'+c.name+'“ und ihre '+n+' Straßen werden entfernt.','Löschen','btn-del',function(){
+    CITIES_DATA.splice(i,1);delete ADDR_DATA[c.name];delete PLZ[c.name];
+    if(selCity===c.name)clearCity();if(stCity===c.name)stCity=null;
+    persistSettings();ctRenderAll();showToast('🗑 Stadt gelöscht');
+  });
+}
 function addCity(){
-  var name=$('new-city-name').value.trim(),plz=$('new-city-plz').value.trim();
+  var name=normStreet($('new-city-name').value),plz=$('new-city-plz').value.trim();
   var fee=parseFloat($('new-city-fee').value)||0,min=parseFloat($('new-city-min').value)||0;
   if(!name){showToast('⚠️ Stadtname eingeben');return;}
-  CITIES_DATA.push({name:name,plz:plz,fee:fee,minOrder:min,active:true});
-  if(!ADDR_DATA[name])ADDR_DATA[name]=[];if(plz)PLZ[name]=plz;
+  if(CITIES_DATA.some(function(c){return c.name.toLowerCase()===name.toLowerCase();})){showToast('⚠️ Diese Stadt gibt es schon');return;}
+  CITIES_DATA.push({name:name,plz:plz,fee:fee,minOrder:min,active:true});ADDR_DATA[name]=[];PLZ[name]=plz;
   ['new-city-name','new-city-plz','new-city-fee','new-city-min'].forEach(function(id){setVal(id,'');});
-  renderCitiesList();persistSettings();showToast('✅ Stadt hinzugefügt');
+  stCity=name;persistSettings();ctRenderCounts();ctShowView('streets');showToast('✅ Stadt hinzugefügt — jetzt Straßen anlegen');
+  setTimeout(function(){var e=$('st-new');if(e)e.focus();},80);
+}
+
+/* ── Straßen ── */
+function stEnsureCity(){if(!stCity||!cityObj(stCity))stCity=CITIES_DATA[0]?CITIES_DATA[0].name:null;}
+function stOpenCity(i){stCity=CITIES_DATA[i].name;stEditing=null;setVal('st-search','');stFilter='all';ctShowView('streets');}
+function stSelectCity(i){stCity=CITIES_DATA[i].name;stEditing=null;setVal('st-search','');stFilter='all';stRenderAll();}
+function stSetFilter(f){stFilter=f;stRenderList();stRenderFilter();}
+function stRenderAll(){stEnsureCity();stRenderCityChips();stRenderHead();stRenderFilter();stRenderList();ctRenderCounts();}
+function stRenderCityChips(){
+  var el=$('st-cities');if(!el)return;
+  el.innerHTML=CITIES_DATA.map(function(c,i){
+    return '<button class="xt-chip'+(c.name===stCity?' on':'')+'" style="'+(c.active?'':'opacity:.6;')+'" onclick="stSelectCity('+i+')">'+esc(c.name)+' <small>'+(ADDR_DATA[c.name]||[]).length+'</small></button>';
+  }).join('');
+}
+function stCustomCount(){
+  var base=baseListFor(stCity);if(!base)return 0;var set={};base.forEach(function(s){set[s]=1;});
+  return (ADDR_DATA[stCity]||[]).filter(function(s){return !set[s];}).length;
+}
+function stIsModified(){
+  var base=baseListFor(stCity);if(!base)return false;
+  var a=base.slice(),b=(ADDR_DATA[stCity]||[]).slice();stSort(a);stSort(b);return JSON.stringify(a)!==JSON.stringify(b);
+}
+function stRenderHead(){
+  var el=$('st-head');if(!el||!stCity)return;var c=cityObj(stCity),n=(ADDR_DATA[stCity]||[]).length,cu=stCustomCount();
+  el.innerHTML='<div class="st-title"><b>'+esc(stCity)+'</b><span>'+esc((c&&c.plz)||'')+'</span>'+
+    '<div class="st-stats">'+n+' Straßen'+(baseListFor(stCity)?' · '+cu+' eigene':'')+'</div></div>'+
+    (stIsModified()?'<button class="btn btn-ghost btn-sm" onclick="stReset()"><i class="ti ti-restore"></i>Standardliste</button>':'');
+}
+function stRenderFilter(){
+  var el=$('st-filter');if(!el)return;
+  if(!baseListFor(stCity)){el.innerHTML='';return;}
+  el.innerHTML='<button class="xt-chip'+(stFilter==='all'?' on':'')+'" onclick="stSetFilter(\'all\')">Alle</button>'+
+    '<button class="xt-chip'+(stFilter==='custom'?' on':'')+'" onclick="stSetFilter(\'custom\')">Eigene <small>'+stCustomCount()+'</small></button>';
+}
+function stRenderList(){
+  var el=$('st-list');if(!el)return;stEnsureCity();
+  var all=(ADDR_DATA[stCity]||[]).slice();stSort(all);
+  var q=(($('st-search')&&$('st-search').value)||'').toLowerCase().trim(),base=baseListFor(stCity),baseSet={};
+  if(base)base.forEach(function(s){baseSet[s]=1;});
+  var rows=all.filter(function(s){return (!q||s.toLowerCase().indexOf(q)>=0)&&(stFilter==='all'||!baseSet[s]);});
+  stView=rows;
+  if(!rows.length){
+    if(!all.length)el.innerHTML='<div class="st-empty">Noch keine Straßen in <b>'+esc(stCity)+'</b>.<br>Oben die erste eingeben oder mit „Mehrere“ eine ganze Liste einfügen.</div>';
+    else if(stFilter==='custom'&&!q)el.innerHTML='<div class="st-empty">Noch keine eigenen Straßen hinzugefügt.</div>';
+    else el.innerHTML='<div class="st-empty">Keine Treffer für „'+esc(q)+'“.<br><button class="btn btn-ghost btn-xs" style="margin-top:8px;" onclick="stAddFromSearch()"><i class="ti ti-plus"></i>„'+esc(capFirst(normStreet(q)))+'“ hinzufügen</button></div>';
+    return;
+  }
+  var h='',last='';
+  rows.forEach(function(s,i){
+    var f=s.charAt(0).toUpperCase();if(f!==last){last=f;h+='<div class="st-letter">'+esc(f)+'</div>';}
+    if(stEditing===s){
+      h+='<div class="st-row"><i class="ti ti-pencil"></i><input class="st-edit" value="'+esc(s)+'" onkeydown="stEditKey(event,'+i+')"/>'+
+        '<button class="xt-mini" onclick="stEditSave('+i+')" title="Speichern"><i class="ti ti-check"></i></button>'+
+        '<button class="xt-mini" onclick="stEditCancel()" title="Abbrechen"><i class="ti ti-x"></i></button></div>';
+    } else {
+      h+='<div class="st-row'+(stFlash===s?' flash':'')+'"><i class="ti ti-road"></i><span class="st-name">'+esc(s)+'</span>'+
+        (base&&!baseSet[s]?'<span class="st-badge">Eigene</span>':'')+
+        '<button class="xt-mini" onclick="stEdit('+i+')" title="Bearbeiten"><i class="ti ti-pencil"></i></button>'+
+        '<button class="xt-mini" onclick="stDelete('+i+')" title="Löschen"><i class="ti ti-trash"></i></button></div>';
+    }
+  });
+  el.innerHTML=h;
+  if(stFlash){var fl=el.querySelector('.st-row.flash');if(fl&&fl.scrollIntoView)fl.scrollIntoView({block:'nearest'});stFlash=null;}
+}
+function stAdd(){
+  var inp=$('st-new'),name=capFirst(normStreet(inp.value));if(!stCity)return;
+  if(!name){showToast('⚠️ Straßenname eingeben');return;}
+  if(name.length>60){showToast('⚠️ Name zu lang');return;}
+  if(stHas(stCity,name)){showToast('⚠️ „'+name+'“ gibt es schon in '+stCity);return;}
+  ADDR_DATA[stCity].push(name);stSort(ADDR_DATA[stCity]);inp.value='';stFlash=name;stFilter='all';setVal('st-search','');
+  persistSettings();stRenderAll();showToast('✅ „'+name+'“ hinzugefügt');inp.focus();
+}
+function stAddFromSearch(){setVal('st-new',($('st-search').value||''));setVal('st-search','');stAdd();}
+function stEdit(i){stEditing=stView[i];stRenderList();var e=document.querySelector('.st-edit');if(e){e.focus();e.select();}}
+function stEditCancel(){stEditing=null;stRenderList();}
+function stEditKey(e,i){if(e.key==='Enter'){e.preventDefault();stEditSave(i);}else if(e.key==='Escape'){stEditCancel();}}
+function stEditSave(i){
+  var old=stView[i],inp=document.querySelector('.st-edit'),val=capFirst(normStreet(inp?inp.value:''));
+  if(!val){showToast('⚠️ Name eingeben');return;}
+  if(val===old){stEditCancel();return;}
+  if(stHas(stCity,val,old)){showToast('⚠️ „'+val+'“ gibt es schon');return;}
+  var arr=ADDR_DATA[stCity],k=arr.indexOf(old);if(k<0){stEditCancel();return;}
+  arr[k]=val;stSort(arr);stEditing=null;stFlash=val;persistSettings();stRenderAll();showToast('✅ Straße geändert');
+}
+function stDelete(i){
+  var s=stView[i],city=stCity;if(s==null)return;
+  openConfirm('🗑️','Straße löschen?','„'+s+'“ wird aus '+city+' entfernt.','Löschen','btn-del',function(){
+    var arr=ADDR_DATA[city],k=arr.indexOf(s);if(k>=0)arr.splice(k,1);persistSettings();stRenderAll();showToast('🗑 Straße gelöscht');
+  });
+}
+function stReset(){
+  var base=baseListFor(stCity);if(!base)return;var city=stCity;
+  openConfirm('↩️','Standardliste wiederherstellen?','Eigene Änderungen an den Straßen von '+city+' gehen verloren.','Wiederherstellen','btn-p',function(){
+    ADDR_DATA[city]=base.slice();persistSettings();stRenderAll();showToast('↩️ Standardliste wiederhergestellt');
+  });
+}
+
+/* Mehrere Straßen auf einmal */
+function stBulkToggle(){
+  var b=$('st-bulk');if(!b)return;var open=b.style.display==='none';b.style.display=open?'block':'none';
+  if(open){setVal('st-bulk-text','');setText('st-bulk-info','');setTimeout(function(){$('st-bulk-text').focus();},40);}
+}
+function stBulkParse(){
+  var parts=String($('st-bulk-text').value||'').split(/[\n;,]+/).map(function(s){return capFirst(normStreet(s));}).filter(Boolean);
+  var seen={},uniq=[];parts.forEach(function(p){var l=p.toLowerCase();if(!seen[l]){seen[l]=1;uniq.push(p);}});
+  var fresh=uniq.filter(function(p){return !stHas(stCity,p);});
+  return {total:uniq.length,fresh:fresh,dups:uniq.length-fresh.length};
+}
+function stBulkPreview(){var r=stBulkParse();setText('st-bulk-info',r.total?(r.fresh.length+' neu · '+r.dups+' bereits vorhanden'):'');}
+function stBulkAdd(){
+  var r=stBulkParse();if(!r.fresh.length){showToast('⚠️ Nichts Neues zum Hinzufügen');return;}
+  r.fresh.forEach(function(s){ADDR_DATA[stCity].push(s);});stSort(ADDR_DATA[stCity]);
+  stBulkToggle();stFilter='all';persistSettings();stRenderAll();
+  showToast('✅ '+r.fresh.length+' Straßen hinzugefügt'+(r.dups?' ('+r.dups+' übersprungen)':''));
+}
+
+/* Direkt im Bestellformular: fehlende Straße speichern und verwenden */
+function pickNewStreet(){
+  var name=capFirst(normStreet($('street-inp').value));if(!name||!selCity)return;
+  var existing=(ADDR_DATA[selCity]||[]).filter(function(s){return s.toLowerCase()===name.toLowerCase();})[0];
+  if(existing)name=existing;
+  else{ADDR_DATA[selCity].push(name);stSort(ADDR_DATA[selCity]);persistSettings();showToast('✅ „'+name+'“ in '+selCity+' gespeichert');}
+  closeAllDD();selectStreet(name);
 }
 
 /* ══════════ EXTRAS MANAGER ══════════
@@ -3078,15 +3337,22 @@ function onGlobalStreet(){
 function renderStreetDD(q){
   if(!selCity)return;var dd=$('street-dd'),all=ADDR_DATA[selCity]||[];
   if(q)streetResults=rankStreets(all,q).map(function(r){return r.s;}).slice(0,30);
-  else streetResults=all.slice().sort(function(a,b){return a.localeCompare(b);});
-  if(!streetResults.length){dd.innerHTML='<div class="dd-empty"><i class="ti ti-road-off"></i> Keine Straße gefunden</div>';dd.classList.add('open');return;}
+  else streetResults=all.slice().sort(function(a,b){return a.localeCompare(b,'de');});
+  var typed=normStreet($('street-inp')?$('street-inp').value:'');
+  var exact=typed&&all.some(function(s){return s.toLowerCase()===typed.toLowerCase();});
+  var addRow=(typed&&!exact)?'<div class="dd-item dd-addr dd-new" onclick="pickNewStreet()"><i class="ti ti-circle-plus"></i>'+
+    '<div class="dd-main"><div class="dd-street">„'+esc(typed)+'“ hinzufügen</div><div class="dd-sub2">Neue Straße in '+esc(selCity)+' speichern und verwenden</div></div></div>':'';
+  if(!streetResults.length){
+    dd.innerHTML=addRow||('<div class="dd-empty"><i class="ti ti-road-off"></i> Noch keine Straßen für '+esc(selCity)+' — unter Einstellungen → Liefergebiete anlegen</div>');
+    dd.classList.add('open');return;
+  }
   var html='<div class="dd-head">📍 '+esc(selCity)+' · '+esc(PLZ[selCity]||'')+(q?' · '+streetResults.length+' Treffer':'')+'</div>',last='';
   streetResults.forEach(function(s,i){
     if(!q){var f=s.charAt(0).toUpperCase();if(f!==last){last=f;html+='<div style="padding:3px 14px;font-size:10px;font-weight:800;color:var(--acc);background:var(--surface);">'+f+'</div>';}}
     html+='<div class="dd-item dd-addr'+(q&&i===0?' active':'')+'" onclick="pickStreet('+i+')"><i class="ti ti-road"></i>'+
       '<div class="dd-main"><div class="dd-street">'+hiMatch(s,q)+'</div></div><span class="dd-city">'+esc(selCity)+'</span></div>';
   });
-  dd.innerHTML=html;dd.classList.add('open');ddReveal(dd);
+  dd.innerHTML=html+addRow;dd.classList.add('open');ddReveal(dd);
 }
 
 function pickGlobal(i){var r=gsResults[i];if(!r)return;closeAllDD();setVal('gs-inp','');selectCity(r.city);selectStreet(r.street);}
